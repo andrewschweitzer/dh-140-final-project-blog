@@ -213,18 +213,13 @@ Influencing the Narrative: Sentiment Analysis of Donald Trump’s Tweets
 <p>The dataset consists of 56,571 observations (tweets) and 9 columns. However, we will filter for tweets after Trump became elected, so the observations will decrease. After preprocessing, the 9 columns along with their data types are id (int), text (string), isRetweet (int), isDeleted (int), device (string), favorites (int), retweets (int), date (datetime), isFlagged (int). The id variable is a unique identifier for each tweet and is irrelevant for an analysis, so we will primarily use the other 8 variables in this study. The text variable contains the contents of Donald Trump’s tweet. The isRetweet is a dummy variable with 0 corresponding to Trump’s tweet not being a retweet and 1 corresponding to the tweet being a retweet. The isDeleted is also a dummy variable with 0 corresponding to the tweet not being deleted and 1 corresponding to the tweet being deleted. The device variable displays the type of device the tweet was published on. The favorites variable corresponds to the number of users who favorited (liked) the tweet. The retweets variable corresponds to the number of users who retweeted the tweet. The date variable is the date and time the tweet was published. The isFlagged variable is a dummy variable with 0 corresponding to the tweet not being flagged and 1 corresponding to the tweet being flagged.</p>
 <p>Link to dataset on Google Drive (Retrieved on 2024-07-29): <a href="https://drive.google.com/file/d/1xRKHaP-QwACMydlDnyFPEaFdtskJuBa6/view">Trump Twitter Archive - CSV File</a></p>
 <p>The code cells below prepare our data for analysis by preprocessing our variables and filtering tweets since November 8, 2016, when Donald Trump became officially elected.</p>
-<div id="dc53916a-e393-4180-9d11-41117dafcb06" class="cell" data-execution_count="28">
-<div class="cell-output cell-output-stdout">
-<pre><code>please</code></pre>
-</div>
-</div>
 <div id="5ccac050-2484-4a16-b72f-4f998bdf6484" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>tweets <span class="op">=</span> pd.read_csv(<span class="st">'tweets_01-08-2021.csv'</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>tweets.drop(columns<span class="op">=</span>[<span class="st">'id'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>tweets <span class="op">=</span> pd.read_csv(<span class="st">'tweets_01-08-2021.csv'</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>tweets.drop(columns<span class="op">=</span>[<span class="st">'id'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="872b08d0-fdc5-42d6-b341-d784c0ce6875" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tweets.isna().<span class="bu">sum</span>()) <span class="co"># check for any NAs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tweets.isna().<span class="bu">sum</span>()) <span class="co"># check for any NAs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>text         0
 isRetweet    0
@@ -238,23 +233,23 @@ dtype: int64</code></pre>
 </div>
 </div>
 <div id="a2091f62-dbd4-423e-a348-2dc236b8a367" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># change variable types</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'text'</span>] <span class="op">=</span> tweets[<span class="st">'text'</span>].astype(<span class="st">'string'</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'isRetweet'</span>] <span class="op">=</span> tweets[<span class="st">'isRetweet'</span>].replace({<span class="st">'f'</span>: <span class="dv">0</span>, <span class="st">'t'</span>: <span class="dv">1</span>})</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'isDeleted'</span>] <span class="op">=</span> tweets[<span class="st">'isDeleted'</span>].replace({<span class="st">'f'</span>: <span class="dv">0</span>, <span class="st">'t'</span>: <span class="dv">1</span>})</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'isFlagged'</span>] <span class="op">=</span> tweets[<span class="st">'isFlagged'</span>].replace({<span class="st">'f'</span>: <span class="dv">0</span>, <span class="st">'t'</span>: <span class="dv">1</span>})</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'device'</span>] <span class="op">=</span> tweets[<span class="st">'device'</span>].astype(<span class="st">'string'</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(tweets[<span class="st">'date'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># change variable types</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'text'</span>] <span class="op">=</span> tweets[<span class="st">'text'</span>].astype(<span class="st">'string'</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'isRetweet'</span>] <span class="op">=</span> tweets[<span class="st">'isRetweet'</span>].replace({<span class="st">'f'</span>: <span class="dv">0</span>, <span class="st">'t'</span>: <span class="dv">1</span>})</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'isDeleted'</span>] <span class="op">=</span> tweets[<span class="st">'isDeleted'</span>].replace({<span class="st">'f'</span>: <span class="dv">0</span>, <span class="st">'t'</span>: <span class="dv">1</span>})</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'isFlagged'</span>] <span class="op">=</span> tweets[<span class="st">'isFlagged'</span>].replace({<span class="st">'f'</span>: <span class="dv">0</span>, <span class="st">'t'</span>: <span class="dv">1</span>})</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'device'</span>] <span class="op">=</span> tweets[<span class="st">'device'</span>].astype(<span class="st">'string'</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(tweets[<span class="st">'date'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="81e2e7e8-9d88-4a76-b1ca-224d8391d6c1" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add new variable: word count</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> word_count(text):</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">len</span>(text.split())</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'word_count'</span>] <span class="op">=</span> tweets[<span class="st">'text'</span>].<span class="bu">apply</span>(word_count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add new variable: word count</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> word_count(text):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">len</span>(text.split())</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'word_count'</span>] <span class="op">=</span> tweets[<span class="st">'text'</span>].<span class="bu">apply</span>(word_count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="542b9ab7-e455-4baa-b167-b3032fb58d32" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>tweets.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tweets.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>text                  string
 isRetweet              int64
@@ -270,28 +265,28 @@ dtype: object</code></pre>
 </div>
 <p>Some tweets include links to pictures, videos, and other tweets, which do not contribute to the sentiment analysis in this study. To prepare our data for analysis, links from tweets have been removed. Additionally, observations that only include links have been removed from this dataset. Removing these links will help reduce noise in the dataset so that the focus remains on the actual text content of Trump’s tweets. Effectively, the URLs have been removed to enhance accuracy and prevent any skewness in the sentiment analysis.</p>
 <div id="20741d7d-c00c-45f9-b4a9-f0ed93bec209" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_links(text):</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    url_pattern <span class="op">=</span> <span class="vs">r'http\S+|www\S+|https\S+'</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> re.sub(url_pattern, <span class="st">''</span>, text)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'text'</span>] <span class="op">=</span> tweets[<span class="st">'text'</span>].<span class="bu">apply</span>(remove_links)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>tweets <span class="op">=</span> tweets[tweets[<span class="st">'text'</span>].<span class="bu">str</span>.<span class="bu">len</span>() <span class="op">&gt;</span> <span class="dv">0</span>] <span class="co"># remove any observations that were only URLs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_links(text):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    url_pattern <span class="op">=</span> <span class="vs">r'http\S+|www\S+|https\S+'</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> re.sub(url_pattern, <span class="st">''</span>, text)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'text'</span>] <span class="op">=</span> tweets[<span class="st">'text'</span>].<span class="bu">apply</span>(remove_links)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>tweets <span class="op">=</span> tweets[tweets[<span class="st">'text'</span>].<span class="bu">str</span>.<span class="bu">len</span>() <span class="op">&gt;</span> <span class="dv">0</span>] <span class="co"># remove any observations that were only URLs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="6ce9179a-a089-4911-8f7b-c4cecdfd9e14" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tweets_full <span class="op">=</span> tweets</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>tweets_before <span class="op">=</span> tweets[tweets[<span class="st">'date'</span>] <span class="op">&lt;</span> pd.Timestamp(<span class="st">'2016-11-08'</span>)]</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>tweets <span class="op">=</span> tweets[tweets[<span class="st">'date'</span>] <span class="op">&gt;</span> pd.Timestamp(<span class="st">'2016-11-08'</span>)] <span class="co"># filtered dataset on focus time period</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tweets_full <span class="op">=</span> tweets</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>tweets_before <span class="op">=</span> tweets[tweets[<span class="st">'date'</span>] <span class="op">&lt;</span> pd.Timestamp(<span class="st">'2016-11-08'</span>)]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>tweets <span class="op">=</span> tweets[tweets[<span class="st">'date'</span>] <span class="op">&gt;</span> pd.Timestamp(<span class="st">'2016-11-08'</span>)] <span class="co"># filtered dataset on focus time period</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="372ac645-50c3-49db-8902-9ae6f2b39051" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tweets.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tweets.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>(25391, 9)</code></pre>
 </div>
 </div>
 <p>After preprocessing our data, the dataset has 25,391 observations and 9 variables. We added a new int variable, word_count, which gives the total number of words in the tweet.</p>
 <div id="f22c58b6-b0a7-491f-8e11-af5ee485b452" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tweets.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tweets.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 <div>
@@ -393,9 +388,7 @@ dtype: object</code></pre>
 <section id="exploratory-data-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h3>
 <p>Before diving into a more focused analysis, we need to first understand our data. First, we will take a look at the summary statistics for the numerical variables. After getting an idea of the data, we can then visualize our data to further deepen our understanding.</p>
-<div id="b72a2140-5ae3-478f-a54a-e67e1bd35903" class="cell" data-jupyter="{&quot;source_hidden&quot;:true}" data-tags="[]" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>tweets.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b72a2140-5ae3-478f-a54a-e67e1bd35903" class="cell" data-tags="[]" data-execution_count="10">
 <div class="cell-output cell-output-display" data-execution_count="10">
 <div>
 <div>
@@ -495,10 +488,20 @@ dtype: object</code></pre>
 </div>
 <p>From the summary statistics we can see there are 25,391 tweets in our dataset. After converting the isRetweeted, isDeleted, isFlagged columns to integer dummy variables, we can observe their means as percentages. About 38% of Trump’s tweets are retweets, about 4% of tweets are deleted, and 1% of tweets are flagged. The summary statistics also give insight into user engagement such as favorites and retweets. On average, Trump’s tweets receive 56,586 favorites with a standard deviation of 73,604. This means that his tweets vary significantly in their like counts. On average, Trump’s tweets receive 16,940 retweets with a standard deviation of 14,770 retweets. Trump’s tweets also widely vary in their retweet counts given by the large standard deviation. Lastly, Trump averages about 25 words per tweet with a standard deviation of around 14 words. To deepen our understanding, we will now visualize the data with plots, as graphs often convey insights more effectively than tables.</p>
 <div id="55436d31-65b9-45d4-9993-ccead4ac041f" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="e8442c42-69ac-4c0b-bb1c-6ca54fa7f17f" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_project_notebook_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This histogram displays the frequency distribution of word counts in Donald Trump’s tweets. In this graph, the x-axis represents the word count of Trump’s tweets and the y-axis represents the frequency of tweets for each word count range. The main takeaway from this graph is that most of Trump’s tweets contain around 20 to 25 words and there is a steep drop off after. However, it is interesting that there is a small peak centered at around 45 words. This graph suggests that Trump’s tweets are generally concise.</p>
+<div id="4340b1ea-37c6-4068-a0dd-8b5208aab44b" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -507,27 +510,8 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>This histogram displays the frequency distribution of word counts in Donald Trump’s tweets. In this graph, the x-axis represents the word count of Trump’s tweets and the y-axis represents the frequency of tweets for each word count range. The main takeaway from this graph is that most of Trump’s tweets contain around 20 to 25 words and there is a steep drop off after. However, it is interesting that there is a small peak centered at around 45 words. This graph suggests that Trump’s tweets are generally concise.</p>
-<div id="4340b1ea-37c6-4068-a0dd-8b5208aab44b" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># box plots of engagement metrics</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>data_long <span class="op">=</span> pd.melt(tweets[[<span class="st">'favorites'</span>, <span class="st">'retweets'</span>]], var_name<span class="op">=</span><span class="st">'Metric'</span>, value_name<span class="op">=</span><span class="st">'Count'</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">6</span>))</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># box plot</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span><span class="st">'Metric'</span>, y<span class="op">=</span><span class="st">'Count'</span>, data<span class="op">=</span>data_long, color <span class="op">=</span> <span class="st">'#ff4137'</span>, ax<span class="op">=</span>axs[<span class="dv">0</span>])</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_title(<span class="st">'Distribution of Likes and Retweets (In Millions)'</span>)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Metric'</span>)</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Count'</span>)</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># zoomed box plot</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span><span class="st">'Metric'</span>, y<span class="op">=</span><span class="st">'Count'</span>, data<span class="op">=</span>data_long, color <span class="op">=</span> <span class="st">'#ff4137'</span>, ax<span class="op">=</span>axs[<span class="dv">1</span>])</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_title(<span class="st">'Zoomed Distribution of Likes and Retweets'</span>)</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Metric'</span>)</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Count'</span>)</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylim(data_long[<span class="st">'Count'</span>].quantile(<span class="fl">0.01</span>), data_long[<span class="st">'Count'</span>].quantile(<span class="fl">0.99</span>))</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The graph on the left illustrates a set of box plots representing favorites and retweets; however, the boxes are squished because of the amount of outliers. We can see that there are some tweets with over a million likes. So, the right plot aims to better illustrate the distribution by showing the graph from the left, but on a smaller scale. This zoomed in plot lets us take a closer look at the majority of the data. We can observe from the box plots that there is a high level of variability in user engagement, with a significant number of outliers indicating some of Donald Trump’s tweets recieved disproportionately high interactions. Lastly, the median likes are retweets are much less than the maximum values, showing most tweets receiving moderate engagement.</p>
+<div id="442946db-e2f5-4164-acc8-f6b6eff7516a" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -536,25 +520,39 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>The graph on the left illustrates a set of box plots representing favorites and retweets; however, the boxes are squished because of the amount of outliers. We can see that there are some tweets with over a million likes. So, the right plot aims to better illustrate the distribution by showing the graph from the left, but on a smaller scale. This zoomed in plot lets us take a closer look at the majority of the data. We can observe from the box plots that there is a high level of variability in user engagement, with a significant number of outliers indicating some of Donald Trump’s tweets recieved disproportionately high interactions. Lastly, the median likes are retweets are much less than the maximum values, showing most tweets receiving moderate engagement.</p>
-<div id="442946db-e2f5-4164-acc8-f6b6eff7516a" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tweet frequency graph over time</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>tweets.set_index(<span class="st">'date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>monthly_tweet_counts <span class="op">=</span> tweets.resample(<span class="st">'M'</span>).size() <span class="co"># aggregate monthly tweets</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>monthly_tweet_counts <span class="op">=</span> monthly_tweet_counts.reset_index()</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>monthly_tweet_counts.columns <span class="op">=</span> [<span class="st">'Date'</span>, <span class="st">'Tweet_Count'</span>]</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>sns.lineplot(x<span class="op">=</span><span class="st">'Date'</span>, y<span class="op">=</span><span class="st">'Tweet_Count'</span>, data<span class="op">=</span>monthly_tweet_counts, marker<span class="op">=</span><span class="st">'o'</span>, color<span class="op">=</span><span class="st">'#ff4137'</span>)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Total Tweet Frequency Over Time (Monthly)'</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Tweets'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>plt.gca().xaxis.set_major_locator(plt.MaxNLocator(nbins<span class="op">=</span><span class="dv">12</span>)) </span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>plt.gcf().autofmt_xdate()  <span class="co"># rotate labels</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>tweets <span class="op">=</span> tweets.reset_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here is a line graph that tracks the total number of tweets Trump published each month starting from November 2016 to January 2021. In this graph the x-axis represents the date of tweet posting and the y-axis shows the number of tweets per month. We can see in the graph that there are peaks in tweet frequency throughout 2020. There is a general upward trend where tweet frequency picks up heavily in 2019 and peaks in 2020. This trend suggests Trump’s tweeting activity escalated immensely due to significant political events and crises (COVID-19).</p>
+<div id="db5af177-5464-49e1-9210-a47609f56c3c" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(tweets[<span class="st">'date'</span>])</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set 'date' as the index</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>tweets.set_index(<span class="st">'date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate duplicates and count tweets and retweets</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>tweets_aggregated <span class="op">=</span> tweets.groupby([pd.Grouper(freq<span class="op">=</span><span class="st">'D'</span>)]).agg({</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'isRetweet'</span>: <span class="st">'sum'</span>,  <span class="co"># Sum retweets</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text'</span>: <span class="st">'count'</span>      <span class="co"># Count tweets</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>}).rename(columns<span class="op">=</span>{<span class="st">'isRetweet'</span>: <span class="st">'Retweets'</span>, <span class="st">'text'</span>: <span class="st">'Tweets'</span>})</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample by month</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>monthly_tweet_counts <span class="op">=</span> tweets_aggregated.resample(<span class="st">'M'</span>).<span class="bu">sum</span>().reset_index()</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a 'Type' column for plotting</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>monthly_tweet_counts_melted <span class="op">=</span> pd.melt(monthly_tweet_counts, id_vars<span class="op">=</span>[<span class="st">'date'</span>], </span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>                                      value_vars<span class="op">=</span>[<span class="st">'Tweets'</span>, <span class="st">'Retweets'</span>], </span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                                      var_name<span class="op">=</span><span class="st">'Type'</span>, value_name<span class="op">=</span><span class="st">'Count'</span>)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">6</span>))</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>sns.lineplot(data<span class="op">=</span>monthly_tweet_counts_melted, x<span class="op">=</span><span class="st">'date'</span>, y<span class="op">=</span><span class="st">'Count'</span>, hue<span class="op">=</span><span class="st">'Type'</span>, marker<span class="op">=</span><span class="st">'o'</span>, palette<span class="op">=</span>[<span class="st">'#003366'</span>, <span class="st">'#66B2FF'</span>])</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Add titles and labels</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Tweet and Retweet Frequency Over Time (Monthly)'</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">'Type'</span>)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -563,39 +561,22 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>Here is a line graph that tracks the total number of tweets Trump published each month starting from November 2016 to January 2021. In this graph the x-axis represents the date of tweet posting and the y-axis shows the number of tweets per month. We can see in the graph that there are peaks in tweet frequency throughout 2020. There is a general upward trend where tweet frequency picks up heavily in 2019 and peaks in 2020. This trend suggests Trump’s tweeting activity escalated immensely due to significant political events and crises (COVID-19).</p>
-<div id="db5af177-5464-49e1-9210-a47609f56c3c" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(tweets[<span class="st">'date'</span>])</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set 'date' as the index</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>tweets.set_index(<span class="st">'date'</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate duplicates and count tweets and retweets</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>tweets_aggregated <span class="op">=</span> tweets.groupby([pd.Grouper(freq<span class="op">=</span><span class="st">'D'</span>)]).agg({</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'isRetweet'</span>: <span class="st">'sum'</span>,  <span class="co"># Sum retweets</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text'</span>: <span class="st">'count'</span>      <span class="co"># Count tweets</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>}).rename(columns<span class="op">=</span>{<span class="st">'isRetweet'</span>: <span class="st">'Retweets'</span>, <span class="st">'text'</span>: <span class="st">'Tweets'</span>})</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample by month</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>monthly_tweet_counts <span class="op">=</span> tweets_aggregated.resample(<span class="st">'M'</span>).<span class="bu">sum</span>().reset_index()</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a 'Type' column for plotting</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>monthly_tweet_counts_melted <span class="op">=</span> pd.melt(monthly_tweet_counts, id_vars<span class="op">=</span>[<span class="st">'date'</span>], </span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                                      value_vars<span class="op">=</span>[<span class="st">'Tweets'</span>, <span class="st">'Retweets'</span>], </span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>                                      var_name<span class="op">=</span><span class="st">'Type'</span>, value_name<span class="op">=</span><span class="st">'Count'</span>)</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">6</span>))</span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>sns.lineplot(data<span class="op">=</span>monthly_tweet_counts_melted, x<span class="op">=</span><span class="st">'date'</span>, y<span class="op">=</span><span class="st">'Count'</span>, hue<span class="op">=</span><span class="st">'Type'</span>, marker<span class="op">=</span><span class="st">'o'</span>, palette<span class="op">=</span>[<span class="st">'#003366'</span>, <span class="st">'#66B2FF'</span>])</span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Add titles and labels</span></span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Tweet and Retweet Frequency Over Time (Monthly)'</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Date'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">'Type'</span>)</span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is a line chart that illustrates the number of tweets and retweets per month from late 2016 to early 2021. Both tweets and retweets follow the same general pattern of an overall increasing trend over time. This indicates growing activity and engagement on Donald Trump’s Twitter. We can observe notable spikes at various points, suggesting specific events that lead to higher Twitter activity. We can also see that the number of tweets is consistently exceeding the number of retweets meaning that Trump’s original tweets were usually more frequent than his retweets. There is a huge spike on this graph in late 2020 which corresponds with the U.S. presidential election period. We can see the activity sharply decline in early 2021 which corresponds to Trump’s Twitter ban in January 2021.</p>
+<div id="97fc72b8-1ed8-46d2-9a1f-4da2d2d6b443" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tweets <span class="op">=</span> tweets.reset_index()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'day_of_week'</span>] <span class="op">=</span> tweets[<span class="st">'date'</span>].dt.day_name()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>tweet_counts <span class="op">=</span> tweets[<span class="st">'day_of_week'</span>].value_counts()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>day_order <span class="op">=</span> [<span class="st">'Monday'</span>, <span class="st">'Tuesday'</span>, <span class="st">'Wednesday'</span>, <span class="st">'Thursday'</span>, <span class="st">'Friday'</span>, <span class="st">'Saturday'</span>, <span class="st">'Sunday'</span>]</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>tweet_counts_df <span class="op">=</span> tweet_counts.reindex(day_order).reset_index()</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>tweet_counts_df.columns <span class="op">=</span> [<span class="st">'Day of Week'</span>, <span class="st">'Tweet Count'</span>]</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>sns.barplot(x<span class="op">=</span><span class="st">'Day of Week'</span>, y<span class="op">=</span><span class="st">'Tweet Count'</span>, data<span class="op">=</span>tweet_counts_df, color <span class="op">=</span> <span class="st">'#66B2FF'</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Tweet Frequency by Day of the Week'</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Day of the Week'</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Tweets'</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -604,22 +585,18 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>This is a line chart that illustrates the number of tweets and retweets per month from late 2016 to early 2021. Both tweets and retweets follow the same general pattern of an overall increasing trend over time. This indicates growing activity and engagement on Donald Trump’s Twitter. We can observe notable spikes at various points, suggesting specific events that lead to higher Twitter activity. We can also see that the number of tweets is consistently exceeding the number of retweets meaning that Trump’s original tweets were usually more frequent than his retweets. There is a huge spike on this graph in late 2020 which corresponds with the U.S. presidential election period. We can see the activity sharply decline in early 2021 which corresponds to Trump’s Twitter ban in January 2021.</p>
-<div id="97fc72b8-1ed8-46d2-9a1f-4da2d2d6b443" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tweets <span class="op">=</span> tweets.reset_index()</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'day_of_week'</span>] <span class="op">=</span> tweets[<span class="st">'date'</span>].dt.day_name()</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>tweet_counts <span class="op">=</span> tweets[<span class="st">'day_of_week'</span>].value_counts()</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>day_order <span class="op">=</span> [<span class="st">'Monday'</span>, <span class="st">'Tuesday'</span>, <span class="st">'Wednesday'</span>, <span class="st">'Thursday'</span>, <span class="st">'Friday'</span>, <span class="st">'Saturday'</span>, <span class="st">'Sunday'</span>]</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>tweet_counts_df <span class="op">=</span> tweet_counts.reindex(day_order).reset_index()</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>tweet_counts_df.columns <span class="op">=</span> [<span class="st">'Day of Week'</span>, <span class="st">'Tweet Count'</span>]</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>sns.barplot(x<span class="op">=</span><span class="st">'Day of Week'</span>, y<span class="op">=</span><span class="st">'Tweet Count'</span>, data<span class="op">=</span>tweet_counts_df, color <span class="op">=</span> <span class="st">'#66B2FF'</span>)</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Tweet Frequency by Day of the Week'</span>)</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Day of the Week'</span>)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Tweets'</span>)</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is a bar chart which shows the total number of tweets posted by Donald Trump on each day of the week. There is not much variation among the days of the week, but we can see that Trump tweeted most frequently on Tuesday, Wednesday, and Friday. We can see dips in activity on Thrusday, Sunday, and Monday indicating that Trump is most active in the middle of the week.</p>
+<div id="35ce977f-2b50-43cc-b73b-7529cf4c562d" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data<span class="op">=</span>tweets, x<span class="op">=</span><span class="st">'favorites'</span>, y<span class="op">=</span><span class="st">'retweets'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, color <span class="op">=</span> <span class="st">'#003366'</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Likes vs. Retweets'</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>plt.xlim(tweets[<span class="st">'favorites'</span>].quantile(<span class="fl">0.01</span>), tweets[<span class="st">'favorites'</span>].quantile(<span class="fl">0.99</span>))</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.ylim(tweets[<span class="st">'retweets'</span>].quantile(<span class="fl">0.01</span>), tweets[<span class="st">'retweets'</span>].quantile(<span class="fl">0.99</span>))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Likes'</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Retweets'</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -628,49 +605,29 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>This is a bar chart which shows the total number of tweets posted by Donald Trump on each day of the week. There is not much variation among the days of the week, but we can see that Trump tweeted most frequently on Tuesday, Wednesday, and Friday. We can see dips in activity on Thrusday, Sunday, and Monday indicating that Trump is most active in the middle of the week.</p>
-<div id="35ce977f-2b50-43cc-b73b-7529cf4c562d" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data<span class="op">=</span>tweets, x<span class="op">=</span><span class="st">'favorites'</span>, y<span class="op">=</span><span class="st">'retweets'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, color <span class="op">=</span> <span class="st">'#003366'</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Likes vs. Retweets'</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>plt.xlim(tweets[<span class="st">'favorites'</span>].quantile(<span class="fl">0.01</span>), tweets[<span class="st">'favorites'</span>].quantile(<span class="fl">0.99</span>))</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>plt.ylim(tweets[<span class="st">'retweets'</span>].quantile(<span class="fl">0.01</span>), tweets[<span class="st">'retweets'</span>].quantile(<span class="fl">0.99</span>))</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Likes'</span>)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Retweets'</span>)</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This graph is a scatter plot which compares the number of favorites to the number of retweets for Donald Trump’s tweets. Overall, we see a positive correlation between likes and retweets. We see from the distribution that there is a dense concentration at lower values, indicating that most tweets have fewer likes and retweets. The spread widens as the number of likes increases and we can observe that the relationship between likes and retweets for tweets with high engagement become more variable. We can see data points for tweets with 0 likes because these are Donald Trump’s retweets which can not receive likes.</p>
+<div id="7ff24bdb-7d92-470b-a345-4f7e251a1450" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>all_texts <span class="op">=</span> <span class="st">' '</span>.join(tweets[<span class="st">'text'</span>].dropna())</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>hashtags <span class="op">=</span> re.findall(<span class="vs">r'#\w+'</span>, all_texts)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>hashtag_counts <span class="op">=</span> Counter(hashtags)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>top_hashtags_df <span class="op">=</span> pd.DataFrame(hashtag_counts.most_common(<span class="dv">10</span>), columns<span class="op">=</span>[<span class="st">'Hashtag'</span>, <span class="st">'Count'</span>])</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>)) </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plt.gca()  <span class="co"># Get current Axes</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>top_hashtags_df.plot(kind<span class="op">=</span><span class="st">'bar'</span>, x<span class="op">=</span><span class="st">'Hashtag'</span>, y<span class="op">=</span><span class="st">'Count'</span>, legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">'#ff4137'</span>, ax<span class="op">=</span>ax)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Top 10 Hashtags'</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Hashtag'</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count'</span>)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="final_project_notebook_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>This graph is a scatter plot which compares the number of favorites to the number of retweets for Donald Trump’s tweets. Overall, we see a positive correlation between likes and retweets. We see from the distribution that there is a dense concentration at lower values, indicating that most tweets have fewer likes and retweets. The spread widens as the number of likes increases and we can observe that the relationship between likes and retweets for tweets with high engagement become more variable. We can see data points for tweets with 0 likes because these are Donald Trump’s retweets which can not receive likes.</p>
-<div id="7ff24bdb-7d92-470b-a345-4f7e251a1450" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>all_texts <span class="op">=</span> <span class="st">' '</span>.join(tweets[<span class="st">'text'</span>].dropna())</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>hashtags <span class="op">=</span> re.findall(<span class="vs">r'#\w+'</span>, all_texts)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>hashtag_counts <span class="op">=</span> Counter(hashtags)</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>top_hashtags_df <span class="op">=</span> pd.DataFrame(hashtag_counts.most_common(<span class="dv">10</span>), columns<span class="op">=</span>[<span class="st">'Hashtag'</span>, <span class="st">'Count'</span>])</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>)) </span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plt.gca()  <span class="co"># Get current Axes</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>top_hashtags_df.plot(kind<span class="op">=</span><span class="st">'bar'</span>, x<span class="op">=</span><span class="st">'Hashtag'</span>, y<span class="op">=</span><span class="st">'Count'</span>, legend<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">'#ff4137'</span>, ax<span class="op">=</span>ax)</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Top 10 Hashtags'</span>)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Hashtag'</span>)</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Count'</span>)</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="final_project_notebook_files/figure-html/cell-20-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -682,33 +639,101 @@ dtype: object</code></pre>
 <h2 class="anchored" data-anchor-id="sentiment-analysis">Sentiment Analysis</h2>
 <p>After gaining a better understanding of our data, we can now move on to analyzing the sentiment of Donald Trump’s tweets.</p>
 <div id="7ca3198f-bff3-456f-91da-c9999f53aaa7" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> word_tokenize</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.sentiment.vader <span class="im">import</span> SentimentIntensityAnalyzer</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.colors <span class="im">import</span> Normalize, TwoSlopeNorm</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.cm <span class="im">import</span> ScalarMappable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> word_tokenize</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.sentiment.vader <span class="im">import</span> SentimentIntensityAnalyzer</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.colors <span class="im">import</span> Normalize, TwoSlopeNorm</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.cm <span class="im">import</span> ScalarMappable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="b931749a-637d-42e3-bf94-12c5e3dc2c34" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sia <span class="op">=</span> SentimentIntensityAnalyzer()</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_sentiment_score(text):</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    sentiment <span class="op">=</span> sia.polarity_scores(text)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sentiment[<span class="st">'compound'</span>]  <span class="co"># compound score: overall sentiment</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'sentiment_score'</span>] <span class="op">=</span> tweets[<span class="st">'text'</span>].<span class="bu">apply</span>(get_sentiment_score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sia <span class="op">=</span> SentimentIntensityAnalyzer()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_sentiment_score(text):</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    sentiment <span class="op">=</span> sia.polarity_scores(text)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sentiment[<span class="st">'compound'</span>]  <span class="co"># compound score: overall sentiment</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'sentiment_score'</span>] <span class="op">=</span> tweets[<span class="st">'text'</span>].<span class="bu">apply</span>(get_sentiment_score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="5e6ae9fd-e574-4b23-a2f8-46cd805ca749" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>sns.histplot(tweets[<span class="st">'sentiment_score'</span>], bins<span class="op">=</span><span class="dv">30</span>, kde<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">'#003366'</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Sentiment Scores'</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Sentiment Score'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frequency'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)  <span class="co"># Sentiment scores range from -1 to 1</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>sns.histplot(tweets[<span class="st">'sentiment_score'</span>], bins<span class="op">=</span><span class="dv">30</span>, kde<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">'#003366'</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Sentiment Scores'</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Sentiment Score'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frequency'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)  <span class="co"># Sentiment scores range from -1 to 1</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_project_notebook_files/figure-html/cell-22-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This histogram depicts the frequency of sentiment scores computed from Donald Trump’s tweets. Sentiment scores range from -1 (very negative) to 1 (very positive). The highest bar is at the sentiment score of 0, indicating neutral sentiment. A significant portion of Trump’s tweets are neutral, as indicated by the peak at 0. There is a notable spread of sentiment scores across the spectrum, with a relatively even distribution of both positive and negative sentiments. However, we can see a slight bias towards the positive sentiment score with more tweets being positive than negative. This suggests that Trump’s tweets vary widely in tone, from very positive to very negative.</p>
+<div id="eb240526-46b8-4d32-b3d5-d5c939140d8e" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>stop_words <span class="op">=</span> <span class="bu">set</span>(stopwords.words(<span class="st">'english'</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>sid <span class="op">=</span> SentimentIntensityAnalyzer()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to preprocess text</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocess_text(text):</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> word_tokenize(text.lower())</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    filtered_words <span class="op">=</span> [word <span class="cf">for</span> word <span class="kw">in</span> tokens <span class="cf">if</span> word <span class="kw">not</span> <span class="kw">in</span> stop_words <span class="kw">and</span> word.isalnum()]</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filtered_words</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to get sentiment</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_sentiment(word):</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    score <span class="op">=</span> sid.polarity_scores(word)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> score[<span class="st">'compound'</span>] <span class="op">&gt;=</span> <span class="fl">0.05</span>:</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'positive'</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> score[<span class="st">'compound'</span>] <span class="op">&lt;=</span> <span class="op">-</span><span class="fl">0.05</span>:</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'negative'</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all text data</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>all_texts <span class="op">=</span> <span class="st">' '</span>.join(tweets[<span class="st">'text'</span>])</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> preprocess_text(all_texts)</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Get sentiment for each word</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>positive_words <span class="op">=</span> [word <span class="cf">for</span> word <span class="kw">in</span> words <span class="cf">if</span> get_sentiment(word) <span class="op">==</span> <span class="st">'positive'</span>]</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>negative_words <span class="op">=</span> [word <span class="cf">for</span> word <span class="kw">in</span> words <span class="cf">if</span> get_sentiment(word) <span class="op">==</span> <span class="st">'negative'</span>]</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Count frequency</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>positive_freq <span class="op">=</span> nltk.FreqDist(positive_words)</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>negative_freq <span class="op">=</span> nltk.FreqDist(negative_words)</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Most common words</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>most_common_positive <span class="op">=</span> positive_freq.most_common(<span class="dv">10</span>)</span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>most_common_negative <span class="op">=</span> negative_freq.most_common(<span class="dv">10</span>)</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for plotting</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>pos_words <span class="op">=</span> [word <span class="cf">for</span> word, count <span class="kw">in</span> most_common_positive]</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>pos_counts <span class="op">=</span> [count <span class="cf">for</span> word, count <span class="kw">in</span> most_common_positive]</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>neg_words <span class="op">=</span> [word <span class="cf">for</span> word, count <span class="kw">in</span> most_common_negative]</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>neg_counts <span class="op">=</span> [count <span class="cf">for</span> word, count <span class="kw">in</span> most_common_negative]</span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">7</span>))</span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Negative words</span></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].barh(neg_words, neg_counts, color<span class="op">=</span><span class="st">'salmon'</span>)</span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Contribution to Sentiment'</span>)</span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'10 Most Common Negative Words'</span>)</span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].invert_yaxis()</span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Positive words</span></span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].barh(pos_words, pos_counts, color<span class="op">=</span><span class="st">'#77d6b1'</span>)</span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Contribution to Sentiment'</span>)</span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'10 Most Common Positive Words'</span>)</span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].invert_yaxis()</span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -717,66 +742,41 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>This histogram depicts the frequency of sentiment scores computed from Donald Trump’s tweets. Sentiment scores range from -1 (very negative) to 1 (very positive). The highest bar is at the sentiment score of 0, indicating neutral sentiment. A significant portion of Trump’s tweets are neutral, as indicated by the peak at 0. There is a notable spread of sentiment scores across the spectrum, with a relatively even distribution of both positive and negative sentiments. However, we can see a slight bias towards the positive sentiment score with more tweets being positive than negative. This suggests that Trump’s tweets vary widely in tone, from very positive to very negative.</p>
-<div id="eb240526-46b8-4d32-b3d5-d5c939140d8e" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>stop_words <span class="op">=</span> <span class="bu">set</span>(stopwords.words(<span class="st">'english'</span>))</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>sid <span class="op">=</span> SentimentIntensityAnalyzer()</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to preprocess text</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocess_text(text):</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    tokens <span class="op">=</span> word_tokenize(text.lower())</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    filtered_words <span class="op">=</span> [word <span class="cf">for</span> word <span class="kw">in</span> tokens <span class="cf">if</span> word <span class="kw">not</span> <span class="kw">in</span> stop_words <span class="kw">and</span> word.isalnum()]</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filtered_words</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to get sentiment</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_sentiment(word):</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    score <span class="op">=</span> sid.polarity_scores(word)</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> score[<span class="st">'compound'</span>] <span class="op">&gt;=</span> <span class="fl">0.05</span>:</span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'positive'</span></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> score[<span class="st">'compound'</span>] <span class="op">&lt;=</span> <span class="op">-</span><span class="fl">0.05</span>:</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'negative'</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine all text data</span></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>all_texts <span class="op">=</span> <span class="st">' '</span>.join(tweets[<span class="st">'text'</span>])</span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> preprocess_text(all_texts)</span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Get sentiment for each word</span></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>positive_words <span class="op">=</span> [word <span class="cf">for</span> word <span class="kw">in</span> words <span class="cf">if</span> get_sentiment(word) <span class="op">==</span> <span class="st">'positive'</span>]</span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>negative_words <span class="op">=</span> [word <span class="cf">for</span> word <span class="kw">in</span> words <span class="cf">if</span> get_sentiment(word) <span class="op">==</span> <span class="st">'negative'</span>]</span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Count frequency</span></span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>positive_freq <span class="op">=</span> nltk.FreqDist(positive_words)</span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>negative_freq <span class="op">=</span> nltk.FreqDist(negative_words)</span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Most common words</span></span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>most_common_positive <span class="op">=</span> positive_freq.most_common(<span class="dv">10</span>)</span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>most_common_negative <span class="op">=</span> negative_freq.most_common(<span class="dv">10</span>)</span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for plotting</span></span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>pos_words <span class="op">=</span> [word <span class="cf">for</span> word, count <span class="kw">in</span> most_common_positive]</span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>pos_counts <span class="op">=</span> [count <span class="cf">for</span> word, count <span class="kw">in</span> most_common_positive]</span>
-<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>neg_words <span class="op">=</span> [word <span class="cf">for</span> word, count <span class="kw">in</span> most_common_negative]</span>
-<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>neg_counts <span class="op">=</span> [count <span class="cf">for</span> word, count <span class="kw">in</span> most_common_negative]</span>
-<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
-<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">7</span>))</span>
-<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Negative words</span></span>
-<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].barh(neg_words, neg_counts, color<span class="op">=</span><span class="st">'salmon'</span>)</span>
-<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Contribution to Sentiment'</span>)</span>
-<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'10 Most Common Negative Words'</span>)</span>
-<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].invert_yaxis()</span>
-<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Positive words</span></span>
-<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].barh(pos_words, pos_counts, color<span class="op">=</span><span class="st">'#77d6b1'</span>)</span>
-<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Contribution to Sentiment'</span>)</span>
-<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'10 Most Common Positive Words'</span>)</span>
-<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].invert_yaxis()</span>
-<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>These bar charts highlight the ten most frequently used positive and negative words in Trump’s tweets that contribute to positive and negative sentiment. Each bar in the bar chart represents the frequency of a specific word and we can see that negative words such as “fake,” “bad,” “crime” dominate the list. These are most likely associated with Donald Trump’s criticisms and negative remarks. These words suggest why his tweets have been known to receive polarizing reactions from the public. Positive words like “great”, “thank”, and “want” are his most prevalent positive words. These words can be associated to his gratitude, possibly from winning the election. This makes sense because while he was campaigning, he used “great” numerous times to get his message across (MAGA). The frequent use of these positive words suggest that Trump used Twitter in an attempt to foster a positive image throughout his presidency.</p>
+<div id="b34c8cac-e5b8-4939-9a09-520ee1b0d0c6" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'year_month'</span>] <span class="op">=</span> pd.to_datetime(tweets[<span class="st">'date'</span>]).dt.to_period(<span class="st">'M'</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>monthly_sentiment <span class="op">=</span> tweets.groupby(<span class="st">'year_month'</span>)[<span class="st">'sentiment_score'</span>].mean()</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>full_date_range <span class="op">=</span> pd.period_range(<span class="st">'2017-01'</span>, <span class="st">'2021-12'</span>, freq<span class="op">=</span><span class="st">'M'</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>monthly_sentiment <span class="op">=</span> monthly_sentiment.reindex(full_date_range, fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>cmap_positive <span class="op">=</span> plt.get_cmap(<span class="st">'Greens'</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>cmap_negative <span class="op">=</span> plt.get_cmap(<span class="st">'Reds'</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>norm <span class="op">=</span> TwoSlopeNorm(vmin<span class="op">=-</span><span class="fl">0.0001</span>, vcenter<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span>monthly_sentiment.<span class="bu">max</span>())</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [cmap_positive(norm(value)) <span class="cf">if</span> value <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> cmap_negative(norm(value)) <span class="cf">for</span> value <span class="kw">in</span> monthly_sentiment.values]</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.bar(monthly_sentiment.index.astype(<span class="bu">str</span>), monthly_sentiment.values, color<span class="op">=</span>colors)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Month'</span>)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Average Sentiment Score'</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Average Sentiment Score by Month (2017-2021)'</span>)</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>ax.set_xticks([<span class="ss">f'</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">-01'</span> <span class="cf">for</span> year <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2017</span>, <span class="dv">2022</span>)])</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>ax.set_xticklabels([<span class="ss">f'Jan </span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> year <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2017</span>, <span class="dv">2022</span>)])</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="op">-</span><span class="fl">0.5</span>, <span class="bu">len</span>(monthly_sentiment) <span class="op">-</span> <span class="fl">0.5</span>)</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>sm_positive <span class="op">=</span> ScalarMappable(cmap<span class="op">=</span>cmap_positive, norm<span class="op">=</span>norm)</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>sm_positive.set_array([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>cbar_positive <span class="op">=</span> fig.colorbar(sm_positive, ax<span class="op">=</span>ax, orientation<span class="op">=</span><span class="st">'vertical'</span>, label<span class="op">=</span><span class="st">'Positive Sentiment Score'</span>, pad<span class="op">=</span><span class="fl">0.02</span>, fraction<span class="op">=</span><span class="fl">0.04</span>)</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>cbar_positive.ax.set_position([<span class="fl">0.93</span>, <span class="fl">0.15</span>, <span class="fl">0.02</span>, <span class="fl">0.7</span>])  </span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>sm_negative <span class="op">=</span> ScalarMappable(cmap<span class="op">=</span>cmap_negative, norm<span class="op">=</span>norm)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>sm_negative.set_array([<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>])</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>cbar_negative <span class="op">=</span> fig.colorbar(sm_negative, ax<span class="op">=</span>ax, orientation<span class="op">=</span><span class="st">'vertical'</span>, label<span class="op">=</span><span class="st">'Negative Sentiment Score'</span>, pad<span class="op">=</span><span class="fl">0.02</span>, fraction<span class="op">=</span><span class="fl">0.04</span>)</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>cbar_negative.ax.set_position([<span class="fl">0.90</span>, <span class="fl">0.15</span>, <span class="fl">0.02</span>, <span class="fl">0.7</span>]) </span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>plt.tight_layout(rect<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">1.5</span>, <span class="dv">1</span>])  </span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -785,41 +785,25 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>These bar charts highlight the ten most frequently used positive and negative words in Trump’s tweets that contribute to positive and negative sentiment. Each bar in the bar chart represents the frequency of a specific word and we can see that negative words such as “fake,” “bad,” “crime” dominate the list. These are most likely associated with Donald Trump’s criticisms and negative remarks. These words suggest why his tweets have been known to receive polarizing reactions from the public. Positive words like “great”, “thank”, and “want” are his most prevalent positive words. These words can be associated to his gratitude, possibly from winning the election. This makes sense because while he was campaigning, he used “great” numerous times to get his message across (MAGA). The frequent use of these positive words suggest that Trump used Twitter in an attempt to foster a positive image throughout his presidency.</p>
-<div id="b34c8cac-e5b8-4939-9a09-520ee1b0d0c6" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>tweets[<span class="st">'year_month'</span>] <span class="op">=</span> pd.to_datetime(tweets[<span class="st">'date'</span>]).dt.to_period(<span class="st">'M'</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>monthly_sentiment <span class="op">=</span> tweets.groupby(<span class="st">'year_month'</span>)[<span class="st">'sentiment_score'</span>].mean()</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>full_date_range <span class="op">=</span> pd.period_range(<span class="st">'2017-01'</span>, <span class="st">'2021-12'</span>, freq<span class="op">=</span><span class="st">'M'</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>monthly_sentiment <span class="op">=</span> monthly_sentiment.reindex(full_date_range, fill_value<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>cmap_positive <span class="op">=</span> plt.get_cmap(<span class="st">'Greens'</span>)</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>cmap_negative <span class="op">=</span> plt.get_cmap(<span class="st">'Reds'</span>)</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>norm <span class="op">=</span> TwoSlopeNorm(vmin<span class="op">=-</span><span class="fl">0.0001</span>, vcenter<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span>monthly_sentiment.<span class="bu">max</span>())</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [cmap_positive(norm(value)) <span class="cf">if</span> value <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> cmap_negative(norm(value)) <span class="cf">for</span> value <span class="kw">in</span> monthly_sentiment.values]</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.bar(monthly_sentiment.index.astype(<span class="bu">str</span>), monthly_sentiment.values, color<span class="op">=</span>colors)</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Month'</span>)</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Average Sentiment Score'</span>)</span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Average Sentiment Score by Month (2017-2021)'</span>)</span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>ax.set_xticks([<span class="ss">f'</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">-01'</span> <span class="cf">for</span> year <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2017</span>, <span class="dv">2022</span>)])</span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>ax.set_xticklabels([<span class="ss">f'Jan </span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> year <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2017</span>, <span class="dv">2022</span>)])</span>
-<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
-<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="op">-</span><span class="fl">0.5</span>, <span class="bu">len</span>(monthly_sentiment) <span class="op">-</span> <span class="fl">0.5</span>)</span>
-<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>sm_positive <span class="op">=</span> ScalarMappable(cmap<span class="op">=</span>cmap_positive, norm<span class="op">=</span>norm)</span>
-<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>sm_positive.set_array([<span class="dv">0</span>, <span class="dv">1</span>])</span>
-<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>cbar_positive <span class="op">=</span> fig.colorbar(sm_positive, ax<span class="op">=</span>ax, orientation<span class="op">=</span><span class="st">'vertical'</span>, label<span class="op">=</span><span class="st">'Positive Sentiment Score'</span>, pad<span class="op">=</span><span class="fl">0.02</span>, fraction<span class="op">=</span><span class="fl">0.04</span>)</span>
-<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>cbar_positive.ax.set_position([<span class="fl">0.93</span>, <span class="fl">0.15</span>, <span class="fl">0.02</span>, <span class="fl">0.7</span>])  </span>
-<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>sm_negative <span class="op">=</span> ScalarMappable(cmap<span class="op">=</span>cmap_negative, norm<span class="op">=</span>norm)</span>
-<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>sm_negative.set_array([<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>])</span>
-<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>cbar_negative <span class="op">=</span> fig.colorbar(sm_negative, ax<span class="op">=</span>ax, orientation<span class="op">=</span><span class="st">'vertical'</span>, label<span class="op">=</span><span class="st">'Negative Sentiment Score'</span>, pad<span class="op">=</span><span class="fl">0.02</span>, fraction<span class="op">=</span><span class="fl">0.04</span>)</span>
-<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>cbar_negative.ax.set_position([<span class="fl">0.90</span>, <span class="fl">0.15</span>, <span class="fl">0.02</span>, <span class="fl">0.7</span>]) </span>
-<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>plt.tight_layout(rect<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">1.5</span>, <span class="dv">1</span>])  </span>
-<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This bar chart displays the average sentiment score of Trump’s tweets for each month from 2017 to early 2021. The color intensity represents the sentiment score, with darker shades indicating higher sentiment. There are noticeable fluctuations in average sentiment scores over the year; however, his monthly tweets are consistently positive throughout his presidency. For example, mid-2018 shows a significant positive peak, while early 2021 shows a decline.</p>
+<div id="680fc86e-ecf1-4ff8-8ed5-aeba6a804469" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># favorites</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span><span class="st">'sentiment_score'</span>, y<span class="op">=</span><span class="st">'favorites'</span>, data<span class="op">=</span>tweets[tweets[<span class="st">'favorites'</span>] <span class="op">&gt;</span> <span class="dv">0</span>], scatter_kws<span class="op">=</span>{<span class="st">'s'</span>:<span class="dv">10</span>}, line_kws<span class="op">=</span>{<span class="st">'color'</span>:<span class="st">'red'</span>}, color <span class="op">=</span> <span class="st">'#003366'</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Sentiment Score vs. Favorites'</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Sentiment Score'</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Favorites'</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>plt.ylim(tweets[<span class="st">'favorites'</span>].quantile(<span class="fl">0.01</span>), tweets[<span class="st">'favorites'</span>].quantile(<span class="fl">0.99</span>))  </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># retweets</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span><span class="st">'sentiment_score'</span>, y<span class="op">=</span><span class="st">'retweets'</span>, data<span class="op">=</span>tweets, scatter_kws<span class="op">=</span>{<span class="st">'s'</span>:<span class="dv">10</span>}, line_kws<span class="op">=</span>{<span class="st">'color'</span>:<span class="st">'red'</span>}, color <span class="op">=</span> <span class="st">'#66B2FF'</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Sentiment Score vs. Retweets'</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Sentiment Score'</span>)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Retweets'</span>)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>plt.ylim(tweets[<span class="st">'retweets'</span>].quantile(<span class="fl">0.01</span>), tweets[<span class="st">'retweets'</span>].quantile(<span class="fl">0.99</span>))  </span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -827,54 +811,27 @@ dtype: object</code></pre>
 </figure>
 </div>
 </div>
-</div>
-<p>This bar chart displays the average sentiment score of Trump’s tweets for each month from 2017 to early 2021. The color intensity represents the sentiment score, with darker shades indicating higher sentiment. There are noticeable fluctuations in average sentiment scores over the year; however, his monthly tweets are consistently positive throughout his presidency. For example, mid-2018 shows a significant positive peak, while early 2021 shows a decline.</p>
-<div id="680fc86e-ecf1-4ff8-8ed5-aeba6a804469" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># favorites</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span><span class="st">'sentiment_score'</span>, y<span class="op">=</span><span class="st">'favorites'</span>, data<span class="op">=</span>tweets[tweets[<span class="st">'favorites'</span>] <span class="op">&gt;</span> <span class="dv">0</span>], scatter_kws<span class="op">=</span>{<span class="st">'s'</span>:<span class="dv">10</span>}, line_kws<span class="op">=</span>{<span class="st">'color'</span>:<span class="st">'red'</span>}, color <span class="op">=</span> <span class="st">'#003366'</span>)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Sentiment Score vs. Favorites'</span>)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Sentiment Score'</span>)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Favorites'</span>)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>plt.ylim(tweets[<span class="st">'favorites'</span>].quantile(<span class="fl">0.01</span>), tweets[<span class="st">'favorites'</span>].quantile(<span class="fl">0.99</span>))  </span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># retweets</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span><span class="st">'sentiment_score'</span>, y<span class="op">=</span><span class="st">'retweets'</span>, data<span class="op">=</span>tweets, scatter_kws<span class="op">=</span>{<span class="st">'s'</span>:<span class="dv">10</span>}, line_kws<span class="op">=</span>{<span class="st">'color'</span>:<span class="st">'red'</span>}, color <span class="op">=</span> <span class="st">'#66B2FF'</span>)</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Sentiment Score vs. Retweets'</span>)</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Sentiment Score'</span>)</span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Retweets'</span>)</span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>plt.ylim(tweets[<span class="st">'retweets'</span>].quantile(<span class="fl">0.01</span>), tweets[<span class="st">'retweets'</span>].quantile(<span class="fl">0.99</span>))  </span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final_project_notebook_files/figure-html/cell-26-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="final_project_notebook_files/figure-html/cell-26-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="final_project_notebook_files/figure-html/cell-25-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The scatter plots illustrate the relationship between sentiment scores and engagement metrics (retweets and favorites). Each dot represents a tweet, plotted based on its sentiment score and the number of retweets (top) or favorites (bottom). Both scatter plots suggest a slight negative correlation between sentiment score and engagement. Tweets with more neutral or slightly negative sentiment tend to receive more retweets and favorites. This could suggest why Donald Trump is more well known as being negative because his tweets with negative sentiment receive more engagement and are emphasized to the public. This trend could indicate that tweets with a balanced or controversial tone resonate more with the public, leading to higher engagement.</p>
 <div id="95a21e7e-77f5-4979-82ea-b229158ace89" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>sns.boxplot(data<span class="op">=</span>tweets, x<span class="op">=</span><span class="st">'device'</span>, y<span class="op">=</span><span class="st">'sentiment_score'</span>, color <span class="op">=</span> <span class="st">'#ff4137'</span>)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Sentiment Distribution by Device Type'</span>)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Device Type'</span>)</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Sentiment Score'</span>)</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>sns.boxplot(data<span class="op">=</span>tweets, x<span class="op">=</span><span class="st">'device'</span>, y<span class="op">=</span><span class="st">'sentiment_score'</span>, color <span class="op">=</span> <span class="st">'#ff4137'</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Sentiment Distribution by Device Type'</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Device Type'</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Sentiment Score'</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">45</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="final_project_notebook_files/figure-html/cell-27-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="final_project_notebook_files/figure-html/cell-26-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
