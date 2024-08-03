@@ -214,7 +214,7 @@ Influencing the Narrative: Sentiment Analysis of Donald Trump’s Tweets
 <p>Link to dataset on Google Drive (Retrieved on 2024-07-29): <a href="https://drive.google.com/file/d/1xRKHaP-QwACMydlDnyFPEaFdtskJuBa6/view">Trump Twitter Archive - CSV File</a></p>
 <p>The code cells below prepare our data for analysis by preprocessing our variables and filtering tweets since November 8, 2016, when Donald Trump became officially elected.</p>
 <div id="dc53916a-e393-4180-9d11-41117dafcb06" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="5ccac050-2484-4a16-b72f-4f998bdf6484" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -391,7 +391,7 @@ dtype: object</code></pre>
 <section id="exploratory-data-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h3>
 <p>Before diving into a more focused analysis, we need to first understand our data. First, we will take a look at the summary statistics for the numerical variables. After getting an idea of the data, we can then visualize our data to further deepen our understanding.</p>
-<div id="b72a2140-5ae3-478f-a54a-e67e1bd35903" class="cell" data-execution_count="10">
+<div id="b72a2140-5ae3-478f-a54a-e67e1bd35903" class="cell" data-jupyter="{&quot;source_hidden&quot;:true}" data-tags="[]" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>tweets.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
